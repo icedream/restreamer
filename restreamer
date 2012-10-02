@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Restreamer (shorter version without extension)
+ *
+ * @author	Carl Kittelberger
+ * @email	icedream@blazing.de
+ * @version	0.1a
+ * @package	restreamer
+ */
+
+// :P
+require("restreamer.php");
