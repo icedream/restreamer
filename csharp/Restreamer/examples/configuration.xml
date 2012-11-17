@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<restreamer>
+  <source uri="http://localhost:8000/somestream">
+    <target uri="icy://password@some.other.serv.er:8000/somestream" />
+    <target uri="icy://username:password@some.new.serv.er:8000/somestream" />
+    <target uri="shout://password@shout.cast.er:9001/" />
+  </source>
+  
+  <source uri="http://localhost:8000/somestream2">
+    <target uri="icy://password@some.other.serv.er:8000/somestream" />
+    <!-- ... -->
+  </source>
+</restreamer>
