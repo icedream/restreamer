@@ -185,6 +185,8 @@ namespace Restreamer
             sm.Connect(ServerHost, ServerPort + (Type == RestreamType.Shoutcast ? 1 : 0)); // Shoutcast audio is sent on port <original-port>+1
 
             stream = new NetworkStream(sm);
+            stream.WriteTimeout = 2000;
+            stream.ReadTimeout = 2000;
             sr = new StreamReader(stream);
             sw = new StreamWriter(stream);
 
@@ -223,29 +225,15 @@ namespace Restreamer
                     break;
             }
 
-            /*
-                    $status = trim(fgets($target["socket"]));
-                    while($status != "")
-                    {
-                            list($capName, $capValue) = explode($status, ":");
-                            $target["capabilities"][$capName] = trim($capValue);
-                            echo "Received: $capName = $capValue\r\n";
-                            $status = trim(fgets($ns));
-                    }
-             */
-
-            Console.WriteLine("Receiving caps...");
-
             string capline;
             while ((capline = sr.ReadLine()) != "")
             {
                 string[] cap = capline.Split(':');
-                Console.WriteLine("Received capability: {0} = {1}", cap[0], cap[1]);
+                Console.WriteLine("Received: {0} = {1}", cap[0], cap[1]);
             }
 
-            Console.WriteLine("Finished receiving caps");
-
             Task.Factory.StartNew(() => _listen());
+            stream.WriteTimeout = 300;
 
             sock = sm;
             receiver_MetadataChanged(Receiver, new LivestreamMetadataEventArgs(Receiver, Receiver.Metadata));
@@ -254,10 +242,8 @@ namespace Restreamer
 
         public void Stop()
         {
-            if (!IsConnected)
-                return;
-
-            sock.Close();
+            if (IsConnected)
+                sock.Close();
             sock = null;
         }
 
